@@ -1,0 +1,112 @@
+.card-cont{
+	width: 100%;
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 20px;
+	padding-right: 20px;
+	background-color: #fefefe;
+	margin-bottom: 15px;
+}
+
+.app-image > img{
+	width: 100px;
+	height: 100px;
+	margin-left: -15px;
+	margin-top: 13px;
+
+}
+.card-center{
+	margin-left: -65px;
+	margin-top: -15px;
+}
+
+.card-center > h2{
+	color: #b34700;
+	font-weight: bold;
+	margin-bottom: 3px;
+}
+.card-center > i, .card-center > p{
+	color: rgba(51, 51, 51, 0.7);
+	font-size: 14px;
+	margin-bottom: 6px;
+}
+.card-center > p , .card-center > a{
+	display: inline-block;
+}
+.card-center > button{
+	display: block;
+}
+.skills > p{
+	background-color: #D35400;
+	display: inline-block;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-radius: 25px;
+	color: #fff;
+	font-size: .9em;
+	margin-right: 5px;
+	letter-spacing: .02em;
+}
+.skills{
+	width: 100%;
+	margin-top: 10px;
+}
+.btn-response{
+	margin-top: 10px;
+	float: right;
+}
+.btn-response > button{
+	display: block;
+	width: 100%;
+	height: 40px;
+}
+.btn-approve{
+	margin-bottom: 10px;
+	background-color: #b34700;
+	color: #fefefe;
+}
+.btn-approve:hover{
+	color: #fefefe;
+}
+
+.btn-profile{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border: 1px solid #D35400;
+	background: #fefefe;
+	transition: 0.2s ease-in-out;
+}
+.btn-profile:focus, .btn-profile:active, .btn-profile:hover {
+    border: 1px solid #fefefe;
+    background-color: #d35400;
+    color: #fefefe;
+    transition: 0.2s ease-in-out;
+}
+.card-center > p{
+	margin-right: 5px;
+}
+.app-date{
+	margin-top: -2px;
+	margin-bottom: 2px;
+}
+.clock-icon > .app-date{
+	display: inline-block;
+}
+.jobs-cont{
+	display: block;
+}
+.jobs-cont > p, .jobs-cont > a{
+	display: inline-block;
+}
+.jobs-cont > a{
+	margin-left: 5px;
+	font-weight: bold;
+	color: #b34700;
+}
+.jobs-cont > a:hover{
+	cursor: pointer;
+}
