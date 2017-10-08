@@ -1,16 +1,15 @@
+@extends('layouts.messageList')
+
 <?php $class = $thread->isUnread(Auth::id()) ? 'alert-info' : ''; ?>
 
-<div class="media alert {{ $class }}">
-    <h4 class="media-heading">
-        <a href="{{ route('messages.show', $thread->id) }}">{{ $thread->subject }}</a>
-        ({{ $thread->userUnreadMessagesCount(Auth::id()) }} unread)</h4>
+@section('content')
+    <td>
     <p>
-        {{ $thread->latestMessage->body }}
+        <span class="subject"><a href="{{ route('messages.show', $thread->id) }}">{!! $thread->participantsString(Auth::id(), ['username']) !!} ({{ $thread->userUnreadMessagesCount(Auth::id()) }} unread)</a></span>
     </p>
-    <p>
-        <small><strong>Creator:</strong> {{ $thread->creator()->name }}</small>
-    </p>
-    <p>
-        <small><strong>Participants:</strong> {{ $thread->participantsString(Auth::id()) }}</small>
-    </p>
+    </td>   
+     <td><span class="subject">{{ $thread->subject }}</span>
+        <small class="text-muted">{{ $thread->latestMessage->body }}</small></td>
+    <td><small>{{ $thread->created_at->diffForHumans() }}</small></td>
 </div>
+@endsection

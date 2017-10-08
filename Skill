@@ -1,0 +1,15 @@
+Skill
+skill_id | category_id
+
+User
+id
+
+Profile
+profile_id | user_id
+
+Job
+job_id | user_id | category_id
+
+Category
+category_id
+

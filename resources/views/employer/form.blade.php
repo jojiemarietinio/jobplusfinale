@@ -35,7 +35,7 @@
 @endsection
 
 @section('js')  
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6Q71RQFpX_9-0qQtuQgxe9EFmGmKIIc8&libraries=places"></script>
 <script src="/bootstrap/bootstrap-select.js"></script>
 <script src="/calendar/moment.min.js"></script>
 <script src="/js/malot-timepicker.js"></script>

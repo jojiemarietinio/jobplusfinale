@@ -22,6 +22,7 @@ use App\Work_Logs;
 use App\Categories;
 use App\Work_Summary;
 use App\Prof_mobile;
+use App\User;
 use Borla\Chikka\Chikka;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests;
@@ -32,7 +33,8 @@ use Session;
 class UserController extends Controller
 {
     public function getHome(){
-        return view('home');
+        $users = User::all(); 
+        return view('home', ['users' => $users]);
     }
 
     public function checkJob(){
@@ -382,17 +384,17 @@ public function getProfileData(){
 
     $newskill = Skills::whereIn('skill_id',$skill_ids)->get();
 
-    $works = Work_Summary::where('is_paid',2)->get();
-    $balance = 0;
-    if(count($works) > 0){
-        foreach($works as $wk){
-            if($wk->works->applicant_id == $id){
-                $balance = $balance + $wk->total_salary; 
-            }
-        }
-    }
+    $works = Works::where('applicant_id', $id)->get();
+    // $balance = 0;
+    // if(count($works) > 0){
+    //     foreach($works as $wk){
+    //         if($wk->works->applicant_id == $id){
+    //             $balance = $balance + $wk->total_salary; 
+    //         }
+    //     }
+    // }
 
-    $data['balance'] = $balance;
+    // $data['balance'] = $balance;
     $data['attainment'] = $attainment;
     $data['degree'] = $degree;
     $data['profile'] = $profile;

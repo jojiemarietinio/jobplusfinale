@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Request;
 
 use App\dbJob;
-
+use App\Jobs;
+use App\User;
 class jobController extends Controller
 {
      /**
@@ -53,6 +54,21 @@ class jobController extends Controller
     {
         $user = dbJob::find($id);
         return view("show", compact("user"));
+    }
+    
+    public function recommendedApplicants() {
+    $job_id = 1;
+ 
+    $job = Jobs::where('job_id', $job_id)->first();
+ 
+ 
+    $recommended_applicants = User::join('profiles', 'users.id', '=', 'profiles.user_id')
+    ->join('prof_skills', 'profiles.profile_id', '=', 'prof_skills.profile_id')
+    ->join('skills.id', 'category')
+    ->where('prof_skills.skill_id', $job->skill_id)
+    ->get();
+ 
+    return $recommended_applicants;
     }
 
     /**

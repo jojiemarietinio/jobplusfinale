@@ -3,6 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
+use App\Prof_Skill;
+use App\Profile;
+use App\Category;
 
 
 class Jobs extends Model 
@@ -11,7 +15,7 @@ class Jobs extends Model
     protected $dates = ['start', 'end'];
     public $timestamps = false;  
     protected $primaryKey =  'job_id';
-    protected $fillable = ['job_type_id', 'category_id', 'title', 'description', 'address_id', 'start_date', 'end_date', 'slot',  'salary', 'paytype', 'is_all_day'];
+    protected $fillable = ['job_type_id', 'category_id', 'skill_id', 'title', 'description', 'address_id', 'start_date', 'end_date', 'slot',  'salary', 'paytype', 'is_all_day'];
 
     public function skills()
     {
@@ -33,5 +37,11 @@ class Jobs extends Model
     public function address(){
         return $this->belongsTo('App\Job_Address','address_id');
     }
+
+    // public function getRecommendedApplicants() {
+    //     // $job = $this->where('job_id', 1);
+
+    //     return 'Hello world!';
+    // }
 
 }

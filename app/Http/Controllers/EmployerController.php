@@ -41,9 +41,9 @@ public function getDashboard(){
   $profiles = Profiles::all();
   return view('employer.home',compact('applications','profiles','jobs'));
 }
-
+ 
 public function postJob(Request $req){
-  $id = Auth::user()->id;
+   $id = Auth::user()->id;
   
   $data['requested'] = $req->all();
 
@@ -419,5 +419,22 @@ public function setUpcoming(){
 
   }
 } 
+
+public function getRecommendedApplicants() {
+    $job_id = 1;
+ 
+    $job = Jobs::where('job_id', $job_id)->first();
+ 
+ 
+    $recommended_applicants = User::join('profiles', 'users.id', '=', 'profiles.user_id')
+    ->join('prof_skills', 'profiles.profile_id', '=', 'prof_skills.profile_id')
+    ->where('prof_skills.skill_id', $job->skill_id)
+    ->get();
+ 
+    return view('employer.empRecom', compact('recommended_applicants'));
+}
+
+
+
 
 }

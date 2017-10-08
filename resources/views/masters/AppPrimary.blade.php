@@ -36,7 +36,7 @@
         <li><a href="{{route('app/dashboard')}}"><i class="fa fa-lg fa-clock-o" aria-hidden="true"></i> Schedule</a></li>
         <li><a href="{{route('app/job/result')}}"><i class="fa fa-lg fa-briefcase" aria-hidden="true"></i> Find Job</a></li>
         <li><a href="{{url('app/applications')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i> Job Applications</a></li>
-        <li><a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a></li>
+        <!-- <li><a href="#"><i class="fa fa-lg fa-bookmark-o" aria-hidden="true"></i> Saved Jobs</a></li> -->
       </ul>
       <ul class="nav navbar-nav navbar-right">
      <!--    <li class="dropdown">
@@ -89,7 +89,7 @@
                 <a href="{{url('/get/user/profile')}}"><span>Profile</span></a>
               </li>
               <li class="divider"></li>
-              <li><a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+              <li><a class="" href="{{url('/logout')}}">Signout</a></li>
           </ul>
         </li>
       </ul>

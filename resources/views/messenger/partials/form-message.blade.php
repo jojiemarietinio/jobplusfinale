@@ -8,15 +8,15 @@
         <textarea name="message" class="form-control">{{ old('message') }}</textarea>
     </div>
 
-    @if($users->count() > 0)
-        <div class="checkbox">
+   
+        <!-- <div class="checkbox">
             @foreach($users as $user)
                 <label title="{{ $user->name }}">
-                    <input type="checkbox" name="recipients[]" value="{{ $user->id }}">{{ $user->name }}
+                    <input type="checkbox" name="recipients[]" value="{{ $user->id }}">{{ $user->username }}
                 </label>
             @endforeach
-        </div>
-    @endif
+        </div> -->
+ 
 
     <!-- Submit Form Input -->
     <div class="form-group">

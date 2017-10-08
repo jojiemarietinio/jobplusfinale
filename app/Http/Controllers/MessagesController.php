@@ -1,62 +1,156 @@
 <?php
 namespace App\Http\Controllers;
 use App\User;
-use Illuminate\Http\Request;
-use Nahid\Talk\Facades\Talk;
-use Auth;
-use View;
-class MessageController extends Controller
+use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
+class MessagesController extends Controller
 {
-    protected $authUser;
-    public function __construct()
+    /**
+     * Show all of the message threads to the user.
+     *
+     * @return mixed
+     */
+    public function index()
     {
-        $this->middleware('auth');
-        Talk::setAuthUserId(Auth::user()->id);
-        View::composer('partials.peoplelist', function($view) {
-            $threads = Talk::threads();
-            $view->with(compact('threads'));
-        });
+        // All threads, ignore deleted/archived participants
+        //$threads = Thread::getAllLatest()->get();
+        // All threads that user is participating in
+        $threads = Thread::forUser(Auth::id())->latest('updated_at')->get();
+        // All threads that user is participating in, with new messages
+        //$threads = Thread::forUserWithNewMessages(Auth::id())->latest('updated_at')->get();
+        return view('messenger.index', compact('threads'));
     }
-    public function chatHistory($id)
+    /**
+     * Shows a message thread.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function show($id)
     {
-        $conversations = Talk::getMessagesByUserId($id);
-        $user = '';
-        $messages = [];
-        if(!$conversations) {
-            $user = User::find($id);
-        } else {
-            $user = $conversations->withUser;
-            $messages = $conversations->messages;
+        try {
+            $thread = Thread::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            Session::flash('error_message', 'The thread with ID: ' . $id . ' was not found.');
+            return redirect()->route('messages');
         }
-        return view('messages.conversations', compact('messages', 'user'));
+        // show current user in list if not a current participant
+        // $users = User::whereNotIn('id', $thread->participantsUserIds())->get();
+        // don't show the current user in list
+        $userId = Auth::id();
+        $users = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();
+        $thread->markAsRead($userId);
+        $thread->getParticipantFromUser(Auth::id());
+        return view('messenger.show', compact('thread', 'users'));
     }
-    public function ajaxSendMessage(Request $request)
+    /**
+     * Creates a new message thread.
+     *
+     * @return mixed
+     */
+    public function create()
     {
-        if ($request->ajax()) {
-            $rules = [
-                'message-data'=>'required',
-                '_id'=>'required'
-            ];
-            $this->validate($request, $rules);
-            $body = $request->input('message-data');
-            $userId = $request->input('_id');
-            if ($message = Talk::sendMessageByUserId($userId, $body)) {
-                $html = view('ajax.newMessageHtml', compact('message'))->render();
-                return response()->json(['status'=>'success', 'html'=>$html], 200);
-            }
+        $users = User::where('id', '!=', Auth::id())->get();
+     //    $input = Input::all();
+     //    try {
+     //        $thread = Thread::between([Auth::id()], $input['recipients'])->latest('updated_at')->firstOrFail();
+     //    } catch (ModelNotFoundException $e) {
+     //        $thread = Thread::create(['subject' => $input['subject']]);
+     //    }
+     // if (Input::has('recipients')) {
+     //            $thread->addParticipant($input['recipients']);
+     //        }
+        $threads = Thread::forUser($users);
+        return view('messenger.create', compact('users'));
+    }
+    /**
+     * Stores a new message thread.
+     *
+     * @return mixed
+     */
+    public function sent()
+    {
+        $currentUserId = Auth::id();
+        $threads = Thread::where('user_id', currentUserId)
+        ->orderBy('updated_at')
+        ->with('messages')
+        ->get();
+
+        return view('messenger.index', compact('threads', 'currentUserId'));
+    }
+    public function store()
+    {
+        $input = Input::all();
+        try {
+            $thread = Thread::between([Auth::id()], $input['recipients'])->latest('updated_at')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $thread = Thread::create(['subject' => $input['subject']]);
+       }
+
+        // $thread = Thread::create([
+        //     'subject' => $input['subject'],
+        // ]);
+        // Message
+        Message::create([
+            'thread_id' => $thread->id,
+            'user_id' => Auth::id(),
+            'body' => $input['message'],
+        ]);
+        // Sender
+        Participant::create(
+    [
+        'thread_id' => $thread->id,
+        'user_id'   => Auth::user()->id,
+        'last_read' => new Carbon
+    ]
+);
+        // Recipients
+        if (Input::has('recipients')) {
+            $thread->addParticipant($input['recipients']);
         }
+
+        return redirect()->route('messages');
     }
-    public function ajaxDeleteMessage(Request $request, $id)
+    /**
+     * Adds a new message to a current thread.
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function update($id)
     {
-        if ($request->ajax()) {
-            if(Talk::deleteMessage($id)) {
-                return response()->json(['status'=>'success'], 200);
-            }
-            return response()->json(['status'=>'errors', 'msg'=>'something went wrong'], 401);
+        try {
+            $thread = Thread::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            Session::flash('error_message', 'The thread with ID: ' . $id . ' was not found.');
+            return redirect()->route('messages');
         }
-    }
-    public function tests()
-    {
-        dd(Talk::channel());
+
+
+        $thread->activateAllParticipants();
+        // Message
+        Message::create([
+            'thread_id' => $thread->id,
+            'user_id' => Auth::id(),
+            'body' => Input::get('message'),
+        ]);
+        // Add replier as a participant
+        $participant = Participant::firstOrCreate([
+            'thread_id' => $thread->id,
+            'user_id' => Auth::id(),
+        ]);
+        $participant->last_read = new Carbon;
+        $participant->save();
+        // Recipients
+        if (Input::has('recipients')) {
+            $thread->addParticipant(Input::get('recipients'));
+        }
+        return redirect()->route('messages.show', $id);
     }
 }

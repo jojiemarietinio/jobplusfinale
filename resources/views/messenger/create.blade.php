@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.create')
 
 @section('content')
     <h1>Create a new message</h1>
@@ -22,7 +22,7 @@
                 <div class="checkbox">
                     @foreach($users as $user)
                         <label title="{{ $user->name }}"><input type="checkbox" name="recipients[]"
-                                                                value="{{ $user->id }}">{!!$user->name!!}</label>
+                        value="{{ $user->id }}">{!!$user->username!!}</label>
                     @endforeach
                 </div>
             @endif

@@ -63,6 +63,7 @@ class Thread extends Eloquent
      */
     public function participants()
     {
+
         return $this->hasMany(Models::classname(Participant::class), 'thread_id', 'id');
     }
     /**
@@ -74,7 +75,7 @@ class Thread extends Eloquent
      */
     public function users()
     {
-        return $this->belongsToMany(Models::classname('User'), Models::table('participants'), 'thread_id', 'user_id');
+        return $this->belongsToMany(Models::classname('User'), Models::table('participants', 'profiles'), 'thread_id', 'user_id');
     }
     /**
      * Returns the user object that created the thread.
@@ -130,6 +131,19 @@ class Thread extends Eloquent
      *
      * @return Builder
      */
+
+    public function scopeSentBy($query, $userId)
+    {
+        $messagesTable = Models::table('messages');
+        $threadsTable = Models::table('threads');
+
+        return $query
+            ->where($messagesTable . '.user_id', "=", $userId)
+            ->where($threadsTable . '.deleted_at', "=", null)
+            ->join($messagesTable, $threadsTable.'.id', '=', $messagesTable.'.thread_id')
+            ->select($threadsTable.'.*', $messagesTable.'.user_id');
+    }
+
     public function scopeForUser(Builder $query, $userId)
     {
         $participantsTable = Models::table('participants');
@@ -267,7 +281,7 @@ class Thread extends Eloquent
      *
      * @return string
      */
-    public function participantsString($userId = null, $columns = ['name'])
+    public function participantsString($userId = null, $columns = ['username'])
     {
         $participantsTable = Models::table('participants');
         $usersTable = Models::table('users');
@@ -280,7 +294,7 @@ class Thread extends Eloquent
         if ($userId !== null) {
             $participantNames->where($usersTable . '.' . $userPrimaryKey, '!=', $userId);
         }
-        return $participantNames->implode('name', ', ');
+        return $participantNames->implode('username', ', ');
     }
     /**
      * Checks to see if a user is a current participant of the thread.

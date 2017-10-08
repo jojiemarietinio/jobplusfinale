@@ -7,6 +7,7 @@
 @section('body')
 @include('employer.modals.jobpage.jobposting')
 @include('employer.modals.jobpage.recommended')
+@include('employer.modals.dashboard.viewjob')
 
 <div class="hero">
 	<div class="container">
@@ -18,15 +19,16 @@
 <div class="container">
 	<div class="row">
 		<h1 class="up-header">Jobs Posted</h1>
-		<div class="form-group-md col-md-offset-6  sort-by">
+		<!-- <div class="form-group-md col-md-offset-6  sort-by">
 			<h3>Sort by</h3>
 			<select class="selectpicker" data-style="selectp">
 				<option value="0" class="selectoption" selected="selected">All</option>
 			</select>
-		</div>
+		</div> -->
 	</div>
 	<hr>
 	<div class="jobfeeds"></div>
+	
 </div>
 @endsection
 

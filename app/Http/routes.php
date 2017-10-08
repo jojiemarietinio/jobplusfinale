@@ -12,26 +12,20 @@
 Route::get('/', function () {
 	return view('login.login');
 });
-
 /*
 	Paypal routes / added by Ramjith Ap
 */
 // Route::get('/paypal/', 'PaypalController@postPaymentWithpaypal'); // this is the url which initiate payment request
 // Route::get('/paypal/{user_id}/status', 'PaypalController@getPaymentStatus'); // redirect url/ response url
-
-
 // Route::get('paywithpaypal', array('as' => 'addmoney.paywithpaypal','uses' => 'AddMoneyController@payWithPaypal',));
 // Route::post('paypal', array('as' => 'addmoney.paypal','uses' => 'AddMoneyController@postPaymentWithpaypal',));
 // Route::get('paypal', array('as' => 'payment.status','uses' => 'AddMoneyController@getPaymentStatus',));
 // Route::get('/get/employer/wallet','AddMoneyController@payWithPaypal');
-
-
 // Route::get('payment-status',array('as'=>'payment.status','uses'=>'PaymentController@paymentInfo'));
 // Route::get('payment',array('as'=>'payment','uses'=>'PaymentController@payment'));
 // Route::get('payment-cancel', function () {
 //     return 'Payment has been canceled';
 // });
-
 // Route::get('/{order?}', [
 //      'name' => 'PayPal Express Checkout',
 //      'as' => 'emp.jobwallet',
@@ -62,36 +56,20 @@ Route::get('/', function () {
      'as' => 'webhook.paypal.ipn',
      'uses' => 'PayPalController@checkout',
  ]);
-
 Route::get('employer/jobwallet', [
 	'uses' => 'PaypalController@form',
 	'as' => 'emp/jobwallet'
 	])->middleware('auth');
-
-
 /*
 	Messaging
 */
-// Route::group(['prefix' => 'messages'], function () {
-//     Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
-//     Route::get('create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
-//     Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
-//     Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
-//     Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
-// });
-
-//Auth::Routes();
-
-Route::get('tests', 'MessageController@tests');
-
-Route::get('/home', 'HomeController@index');
-
-
-Route::get('message/{id}', 'MessageController@chatHistory')->name('message.read');
-
-Route::group(['prefix'=>'ajax', 'as'=>'ajax::'], function() {
-Route::post('message/send', 'MessageController@ajaxSendMessage')->name('message.new');
-Route::delete('message/delete/{id}', 'MessageController@ajaxDeleteMessage')->name('message.delete');
+Route::group(['prefix' => 'messages'], function () {
+    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
+    Route::get('create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
+    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
+    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
+    Route::get('create/{id}', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
 });
 /*
 	Jobify Bot Routes
@@ -186,16 +164,15 @@ Route::get('/employer/test/{$id}', [
 	'uses' => 'EmployerController@test',
 	'as' => 'test'
 	])->middleware('auth');
-
 Route::get('/employer/dashboard', [
 	'uses' => 'EmployerController@getDashboard',
 	'as' => 'emp/dashboard'
 	])->middleware('auth');
-
 Route::get('/employer/jobpost', [
 	'uses' => 'EmployerController@getJobPost',
 	'as' => 'emp/job/post'
 	])->middleware('auth');
+
 Route::get('/set/postjob','EmployerController@postJob');
 Route::get('/employer/jobpost/data', [
 	'uses' => 'EmployerController@getJobPostData',
@@ -205,13 +182,11 @@ Route::get('employer/applications', [
 	'uses' => 'EmployerController@getApplications',
 	'as' => 'emp/applications'
 	])->middleware('auth');
-
 Route::get('employer/jobwallet', [
 	'uses' => 'EmployerController@getJobwallet',
 	'as' => 'emp/jobwallet'
 	])->middleware('auth');
-
-Route::get('/get/emloyer/viewJob', 'EmployerController@getViewJob');
+Route::get('/get/employer/viewJob', 'EmployerController@getViewJob');
 //Route::get('/get/employer/wallet','EmployerController@getJobwallet');
 Route::get('/get/employer/profile','EmployerController@getProfile');
 // Applications
@@ -229,15 +204,12 @@ Route::get('/employer/endjob/summary','EmployerController@endJobSummary');
 |--------------------------------------------------------------------------
 */
 //Route::get('create_paypal_plan', 'PaypalController@create_plan');
-
 // route for view/blade file
 // Route::get('paywithpaypal', array('as' => 'paywithpaypal','uses' => 'PaypalController@payWithPaypal',));
 // // route for post request
 // Route::post('paypal', array('as' => 'paypal','uses' => 'PaypalController@postPaymentWithpaypal',));
 // // route for check status responce
 // Route::get('paypal', array('as' => 'status','uses' => 'PaypalController@getPaymentStatus',));
-
-
 /*
 |--------------------------------------------------------------------------
 | Applicant Routes
@@ -286,4 +258,5 @@ Route::get("show/{id}", "jobController@show");
 Route::get("edit/{id}", "jobController@edit");
 Route::patch("update/{id}", "jobController@update");
 Route::get("delete/{id}", "jobController@destroy");
+Route::get('/job/recommended_applicants', 'jobController@recommendedApplicants');
 });

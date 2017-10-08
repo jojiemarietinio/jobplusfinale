@@ -44,7 +44,7 @@
         <div class="tab-pane active" role="tabpanel" id="step1">
           <div class="tab-header">
             <h1>Basic Informations</h1>
-            <p>Kindly fill in the form below.</p>
+            <p>Kindly fill in the form below.</p> 
           </div>  
           <div class="row">
             <div class="col-sm-12 setup-header">

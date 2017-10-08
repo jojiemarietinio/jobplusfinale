@@ -118,7 +118,7 @@ class ApplicantController extends Controller
    $dest_address = $destin->results[0]->formatted_address;
    $address = ['destination' => $dest_address, 'origin' => $orig_address];
     // Get the Distance from User address to work address
-   $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyCeI_y3RK1B0Rf6luHE6BtvOfHXfqBxoa4&libraries=places';
+   $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places';
    $distjson = @file_get_contents($disturl);
    $distdata = json_decode($distjson);
    $distance = $distdata->rows[0]->elements[0]->distance->text;
@@ -166,7 +166,7 @@ class ApplicantController extends Controller
       $dest_address = $destin->results[0]->formatted_address;
       $address = ['destination' => $dest_address, 'origin' => $orig_address];
     // Get the Distance from User address to work address
-      $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyCeI_y3RK1B0Rf6luHE6BtvOfHXfqBxoa4&libraries=places';
+      $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($orig_address).'&destinations='.urlencode($dest_address).'&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places';
       $distjson = @file_get_contents($disturl);
       $distdata = json_decode($distjson);
       $distance = $distdata->rows[0]->elements[0]->distance->text;
@@ -415,7 +415,7 @@ function getConflict($jobid){
     foreach($work as $wk){
       $job_id = $wk->schedules->job_id;
       $work_address = $wk->schedules->jobs->address->address;
-      $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($work_address).'&destinations='.urlencode($job_add).'&key=AIzaSyCeI_y3RK1B0Rf6luHE6BtvOfHXfqBxoa4&libraries=places';
+      $disturl = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&travelMode=DRIVING&avoidHighways=false&avoidTolls=false&origins='.urlencode($work_address).'&destinations='.urlencode($job_add).'&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places';
       $distjson = @file_get_contents($disturl);
       $distdata = json_decode($distjson);
       // $origin = $distdata->origin_addresses[0];
@@ -514,7 +514,7 @@ public function getUserSkills(){
 function getJobFeeds(){
   $userid = Auth::user()->id;
   $jobs = Job_feeds::where('user_id',$userid)->orderBy('result','DESC')->get();
-  $job = array();
+  
   foreach($jobs as $jb){
     if($jb->jobs->slot > 0){
       $job[] = [
@@ -547,7 +547,7 @@ return $response;
 function getJobNearby(){
   $userid = Auth::user()->id;
   $jobs = Job_nearby::where('user_id',$userid)->orderBy('result','DESC')->get();
-  $job = array();
+  
   foreach($jobs as $jb){
     if($jb->jobs->slot > 0){
       $job[] = [
@@ -733,7 +733,7 @@ else{
     $jobID[] = $jb->job_id;
     $jfeed = Job_feeds::where('job_id',$jb->job_id)->where('user_id',$userid)->first();
     if(count($jfeed) == 0){
-      $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyCeI_y3RK1B0Rf6luHE6BtvOfHXfqBxoa4&libraries=places";
+      $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
       $json = @file_get_contents($url);
       $location_datas = json_decode($json);
       $distance = $location_datas->rows[0]->elements[0]->distance->value;
@@ -787,28 +787,28 @@ public function Apply(Request $req){
   return response()->json($data);
 }
 public function getPendingConfirmation(){
-  $id = Auth::user()->id;
-  $sum = Work_Summary::all();
-  if(count($sum) >0){
-    foreach($sum as $s){
-      if($s->works->applicant_id == $id){
-        $work_sum = Work_Summary::where('summary_id',$s->summary_id)->where('is_paid','!=',2)->first();
-      }
-    }
-    $response = [];
-    $response = [
-    'summary' => $work_sum,
-    'employer' => $work_sum->works->schedules->jobs->users->profile ,
-    'work' => $work_sum->works
-    ];
-    $data['summary'] = $response;
-    $status = 200;
-  }
-  else{
-    $status = 400;
-  }
-  $data['status'] = $status;
-  return response()->json($data);
+  // $id = Auth::user()->id;
+  // $sum = Work_Summary::all();
+  // if(count($sum) >0){
+  //   foreach($sum as $s){
+  //     if($s->works->applicant_id == $id){
+  //       $work_sum = Work_Summary::where('summary_id',$s->summary_id)->where('is_paid','!=',2)->first();
+  //     }
+  //   }
+  //   $response = [];
+  //   $response = [
+  //   'summary' => $work_sum,
+  //   'employer' => $work_sum->works->schedules->jobs->users->profile ,
+  //   'work' => $work_sum->works
+  //   ];
+  //   $data['summary'] = $response;
+  //   $status = 200;
+  // }
+  // else{
+  //   $status = 400;
+  // }
+  // $data['status'] = $status;
+  // return response()->json($data);
 }
 public function endJobSummary(Request $req){
   $workid = $req->workid;
@@ -984,7 +984,6 @@ public function receivePayment(Request $req){
 }
 public function getApplications(){
   $userid = Auth::user()->id;
-
   $apps = Application::where('applicant',$userid)
                       ->where('is_accepted',0)->get();
   return view('applicant.jobapplications',compact('apps'));

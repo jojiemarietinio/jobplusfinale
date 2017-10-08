@@ -774,12 +774,12 @@ $('#loading').fadeOut(200);
 				console.log(data);
 				if(data.status == 200){
 					for(var i =0; i< data.reviews.length; i++){
-							var end = moment(data.reviews[0].review.work.end_time).fromNow();
+							//var end = moment(data.reviews[0].review.work.end_time).fromNow();
 						$('#divHistory').append($('<div>').addClass('history')
 							.append($('<img>').addClass('history-img').attr('src',data.reviews[0].employer.avatar))
 							.append($('<div>').addClass('history-cont')
 								.append($('<h2>').text(data.reviews[0].employer.fname + ' ' + data.reviews[0].employer.lname))
-								.append($('<p>').text(data.reviews[0].job.title + ' - ' + end))
+								.append($('<p>').text(data.reviews[0].job.title))
 								.append($('<select>').attr('id','example').addClass('rating')
 									.append($('<option>').attr('value',1).text('1'))
 									.append($('<option>').attr('value',2).text('2'))

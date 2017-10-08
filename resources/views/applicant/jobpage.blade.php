@@ -138,7 +138,7 @@
 		
 	<script src="/js/jquery-1.11.1.min.js"></script>
 	<script src="/js/jquery-ui.min.js"></script>
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script> -->
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places"></script>
     <script src="/calendar/moment.min.js"></script>
     <script src="/bootcard/js/bootcards.min.js"></script>
     <script src="/js/custom.js"></script>

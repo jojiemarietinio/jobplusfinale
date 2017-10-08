@@ -36,8 +36,8 @@
         <li><a href="{{route('emp/applications')}}"><i class="fa fa-handshake-o" aria-hidden="true"></i>Applicants</a></li>
       </ul>
      <ul class="nav navbar-nav navbar-right">
-        <!-- <li class="dropdown"> -->
-          <!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-lg fa-bell-o" aria-hidden="true"></i> Messsages</a> -->
+
+        <li><a href="/messages">Messages</a></li>
           <!-- <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
                   <span class="item">
@@ -56,10 +56,10 @@
               <li class="divider"></li>
               <li><a class="#" href="">See all</a></li>
           </ul> -->
-        <!-- </li> -->
+        </li>
        
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;"> <!-- <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> -->{{Auth::user()->profile->fname}}{{ Auth::user()->profile->lname}}<span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{Auth::user()->profile->avatar}}" style="width:25px;height:25px;border-radius:50%;"> <!-- <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> -->{{Auth::user()->profile->fname}} {{ Auth::user()->profile->lname}}<span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-cart" role="menu">
               <li>
                 <a href="{{url('/applicant/dashboard')}}"><span>Switch to Applicant</span></a>

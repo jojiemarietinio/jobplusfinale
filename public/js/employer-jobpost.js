@@ -29,6 +29,7 @@ $(document).ready(function(){
     $(document).on('click','.btn-finish',function(e){
         e.preventDefault();
         var category = $('#job-category option:selected').val();
+        var skills = $('#s-skill option:selected').val();
         var title = $('#jobtitle').val();
         var description = $('#description').val();
         var address = $('#job-address').val();
@@ -208,7 +209,7 @@ $('.jobfeeds').empty();
                     .append($('<p>').text(data.jobs[i].description)))
                 .append($('<span>').addClass('tool')
                     .append($('<span>').addClass('btn-feeds')
-                        .append($('<button>').addClass('btn btn-sm btn-viewjob').text('View Job').attr('jobid',data.jobs[i].id))))
+                        .append($(' ').addClass(' ').text(' ').attr('jobid',data.jobs[i].id))))
                 .append($('<div>').addClass('feed-footer')
                     .append($('<div>').addClass('col-md-3')
                         .append($('<div>').addClass('job-info')
@@ -232,6 +233,78 @@ $('.jobfeeds').empty();
     }
     );
 }
+ 
+$(document).on('click','.btn-viewjob',function(){
+  var jobid = this.getAttribute('jobid');
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+
+  var viewjob = $.ajax({
+    url: '/get/employer/viewJob',
+    method: 'GET',
+    data: {
+      'jobid' : jobid,
+    }
+  });
+
+  viewjob.done(function(data){
+    console.log(data);
+    $('#modal-title').text(data.jobs.title);
+    $('#modal-emp').text('by '+data.employer.fname + ' '+data.employer.lname);
+    $('#modal-desc').text(data.jobs.description);
+    $('#modal-sal').text( data.jobs.salary + ' / ' +data.paytype);
+    var start = moment(data.schedule.start);
+    var end = moment(data.schedule.end);
+    
+    var startDay1 = start.format('dddd');
+    var startMonth = start.format('MMM');
+    var startDay2 = start.format('D'); 
+    var startYear = start.format('YYYY');
+    var startTime = start.format('LT');
+
+    var endDay1 = end.format('dddd');
+    var endMonth = end.format('MMM');
+    var endDay2 = end.format('D'); 
+    var endYear = end.format('YYYY');
+    var endTime = end.format('LT');
+
+    $('#modal-startDay').text(startDay1 + ', '+startMonth + '. '+startDay2 + ' '+startYear);
+    $('#modal-startTime').text(startTime);
+    $('#modal-endDay').text(endDay1 + ', '+endMonth + '. '+endDay2 + ' '+endYear);
+    $('#modal-endTime').text(endTime);
+    $('#modal-fromnow').text(start.fromNow(true));
+
+    var meo = [];
+    var locs;
+    var centers = { lat: parseFloat(data.address.lat), lng: parseFloat(data.address.lng) };
+    meo.push(centers);
+
+    $('#modal-address').text(data.address.address);
+
+    function setMapOnAll(map){
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
+    }
+    setMapOnAll(null);
+    var marker = new google.maps.Marker({
+      map: modalmap,
+      position: meo[0],
+      title: 'Hello World!'
+    });
+
+    $('#modalgmap').attr('hidden',false);
+    setTimeout(google.maps.event.trigger(modalmap, 'resize'),300);
+    modalmap.setCenter(centers);
+  });
+
+  $('#viewJob-Modal').modal('show');
+
+});
+
 var local;
 var map;
 var centers = {lat:10.309937078055952,lng:123.89307975769043};
@@ -327,7 +400,7 @@ function initializeMap(){
             });
         }
     }
-    $("#jobpost-Modal").on("shown.bs.modal", function () {
-        google.maps.event.trigger(map, "resize");
-        map.setCenter(centers);
-    });
+
+
+
+ 

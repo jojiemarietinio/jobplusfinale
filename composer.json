@@ -13,9 +13,9 @@
         "ronaldborla/chikka": "@dev",
         "mpociot/botman": "^1.4",
         "paypal/rest-api-sdk-php": "*",
-        "cmgmyr/messenger": "^2.14",
+        "cmgmyr/messenger": "~2.0",
         "omnipay/omnipay": "*",
-         "ignited/laravel-omnipay": "2.*",
+        "ignited/laravel-omnipay": "2.*",
         "guzzlehttp/guzzle": "^6.3",
         "omnipay/paypal": "^2.6",
         "nahid/talk": "^2.2"

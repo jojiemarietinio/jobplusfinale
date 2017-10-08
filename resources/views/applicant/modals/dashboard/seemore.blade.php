@@ -1,4 +1,4 @@
-<div class="modal fade" id="seeMoreModal" role="dialog">
+ <div class="modal fade" id="seeMoreModal" role="dialog">
   <div class="col-md-12">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">

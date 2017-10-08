@@ -10,7 +10,7 @@ class Works extends Model
 	
 	protected $primaryKey = 'work_id';
 	protected $table = 'works';
-	protected $dates = ['deleted_at'];
+	//protected $dates = ['deleted_at'];
 	 
 	
 	public $timestamps = false;

@@ -121,7 +121,7 @@ class ProfileController extends Controller
 				$jfeed = Job_feeds::where('job_id',$jb->job_id)->where('user_id',$userid)->first();
 
 				if(count($jfeed) == 0){
-					$url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ&libraries=places";
+					$url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$lat1.",".$long1."&destinations=".$jb->address->lat.",".$jb->address->lng."&mode=transit&key=AIzaSyDBJJH4SL6eCDPu7N5C-2XcBt8jpZJeMyQ-pRATZS3nG0&libraries=places";
 					$json = @file_get_contents($url);
 					$location_datas = json_decode($json);
 					$distance = $location_datas->rows[0]->elements[0]->distance->value;
@@ -446,27 +446,27 @@ class ProfileController extends Controller
 		}
 
 		public function getHistory(){
-			$userid = Auth::user()->id;
-			$review = Reviews::where('reviewed_id',$userid)->get();
-			$reviewID = [];
+            $userid = Auth::user()->id;
+            $review = Reviews::where('reviewer_id',$userid)->get();
+            $reviewID = [];
+            if(count($review) > 0){
+                foreach($review as $rev){
+                    $reviewID[] = [
+                        'review' => $rev,
+                        'employer' => !empty($rev->employer->profile) ? $rev->employer->profile : [],
+                        'job' => !empty($rev->jobs) ? $rev->jobs : [],
+                    ];
+                }
+                $response = [
+                'reviews' => $reviewID,
+                'status' => 200];
+            }
 
-			if(count($review) > 0){
-				foreach($review as $rev){
-					$reviewID[] = [
-					'review' => $rev,
-					'employer' => $rev->employer->profile,
-					'job' => $rev->work->schedules->jobs
-					];
-				}
-				$response = [
-				'reviews' => $reviewID,
-				'status' => 200];
-			}
-			else{
-				$response = [
-				'status' => 400];
-			}
-			return response()->json($response);
-		}
+            else{
+                $response = [
+                'status' => 400];
+            }
+            return response()->json($response);
+        }
 
 	}
